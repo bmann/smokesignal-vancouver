@@ -1,0 +1,24 @@
+{
+	"dockerComposeFile": [
+		"docker-compose.yml"
+	],
+	"service": "devcontainer",
+	"workspaceFolder": "/workspace",
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/node:1": {}
+	},
+	"postCreateCommand": "/workspace/.devcontainer/post-create.sh",
+	"forwardPorts": [
+		3100
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"rust-lang.rust-analyzer",
+				"samuelcolvin.jinjahtml",
+				"tamasfe.even-better-toml"
+			]
+		}
+	}
+}

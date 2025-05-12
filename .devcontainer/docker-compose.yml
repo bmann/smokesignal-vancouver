@@ -1,0 +1,49 @@
+version: '3.8'
+volumes:
+  smokesignal_data:
+  smokesignal_db:
+  smokesignal_ts:
+  smokesignal_sccache:
+services:
+  devcontainer:
+    image: mcr.microsoft.com/devcontainers/rust:1-1-bullseye
+    volumes:
+      - ..:/workspace:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+      - smokesignal_sccache:/sccache
+      - smokesignal_data:/var/lib/smokesignal
+    command: sleep infinity
+    environment:
+      - RUSTC_WRAPPER=sccache
+      - SCCACHE_DIR=/sccache
+      - RUST_LOG=debug
+      - RUST_BACKTRACE=1
+      - RUST_LIB_BACKTRACE=1
+      - HTTP_PORT=3100
+      - TZ=America/New_York
+      - DATABASE_URL=postgres://postgres:password@postgres/smokesignal
+      
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    volumes:
+      - smokesignal_db:/var/lib/postgresql/data
+      - ./postgres_init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: 'pg_isready -U postgres'
+      interval: 500ms
+      timeout: 10s
+      retries: 20
+
+  valkey:
+    image: valkey/valkey:8-alpine
+
+  tailscale:
+    image: tailscale/tailscale:latest
+    restart: unless-stopped
+    environment:
+      - TS_STATE_DIR=/var/run/tailscale
+    volumes:
+      - smokesignal_ts:/var/run/tailscale
