@@ -319,6 +319,29 @@ impl TryFrom<String> for OAuthActiveKeys {
     }
 }
 
+<<<<<<< HEAD
+=======
+impl AsRef<Vec<String>> for InvitationActiveKeys {
+    fn as_ref(&self) -> &Vec<String> {
+        &self.0
+    }
+}
+
+impl TryFrom<String> for InvitationActiveKeys {
+    type Error = anyhow::Error;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        let values = value
+            .split(';')
+            .map(|s| s.to_string())
+            .collect::<Vec<String>>();
+        if values.is_empty() {
+            return Err(ConfigError::EmptyInvitationActiveKeys.into());
+        }
+        Ok(Self(values))
+    }
+}
+
+>>>>>>> 3a59650 (Initial commit)
 impl AsRef<Vec<String>> for AdminDIDs {
     fn as_ref(&self) -> &Vec<String> {
         &self.0
@@ -370,3 +393,49 @@ impl TryFrom<String> for DnsNameservers {
         Ok(Self(nameservers))
     }
 }
+<<<<<<< HEAD
+=======
+
+// Default implementation for testing
+#[cfg(test)]
+impl Default for Config {
+    fn default() -> Self {
+        // Create a random key for testing
+        let cookie_key_data = [0u8; 64];
+        let http_cookie_key = HttpCookieKey(Key::from(&cookie_key_data));
+
+        // Create empty collections
+        let signing_keys = SigningKeys(OrderMap::new());
+        let oauth_active_keys = OAuthActiveKeys(Vec::new());
+        let invitation_active_keys = InvitationActiveKeys(Vec::new());
+        let certificate_bundles = CertificateBundles(Vec::new());
+
+        // Create a default admin DID for testing
+        let admin_dids = AdminDIDs(vec!["did:plc:testadmin".to_string()]);
+
+        // Create empty DNS nameservers list for testing
+        let dns_nameservers = DnsNameservers(Vec::new());
+
+        Self {
+            version: "test-version".to_string(),
+            http_port: HttpPort(8080),
+            http_cookie_key,
+            external_base: "https://test.example".to_string(),
+            certificate_bundles,
+            user_agent: "smokesignal-test".to_string(),
+            database_url: "sqlite://test.db".to_string(),
+            plc_hostname: "plc.test".to_string(),
+            signing_keys,
+            oauth_active_keys,
+            invitation_active_keys,
+            // For testing, this needs to be a valid P-256 key
+            // This would normally come from the signing keys, but for tests
+            // we'll create a dummy one - note that it won't actually be used.
+            destination_key: SecretKey::random(&mut rand::thread_rng()),
+            redis_url: "redis://localhost:6379".to_string(),
+            admin_dids,
+            dns_nameservers,
+        }
+    }
+}
+>>>>>>> 3a59650 (Initial commit)
