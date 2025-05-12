@@ -39,5 +39,10 @@ dist/
 localdev/calendars-data/
 
 **/.claude/settings.local.json
+CLAUDE.local.md
 Cargo.lock
+
 .DS_Store
+
+/keys.json
+/.vscode/launch.json

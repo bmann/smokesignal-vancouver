@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'smokesignal'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=smokesignal"
+                ],
+                "filter": {
+                    "name": "smokesignal",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "DEBUG": "true",
+                "HTTP_PORT": "3100",
+                "EXTERNAL_BASE": "your-hostname",
+                "HTTP_COOKIE_KEY": "Iteax8DsUgOrQJdES+zMa6JKYlbQkewl42Y1bO1ExSyB9jkUktrdKwwWSu+X58T20liLmsegL3LbQB0FvE1AEA",
+                "DATABASE_URL": "postgres://postgres:password@postgres/smokesignal",
+                "OAUTH_ACTIVE_KEYS": "01JV2SGY5K5KW5V4YS0YQ352FD",
+                "DESTINATION_KEY": "01JV2SGY5K5KW5V4YS0YQ352FD",
+                "SIGNING_KEYS": "/workspace/keys.json",
+                "RUST_LOG": "smokesignal=debug,html5ever=info,info"
+            }
+        }
+    ]
+}

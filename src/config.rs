@@ -320,6 +320,7 @@ impl TryFrom<String> for OAuthActiveKeys {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 impl AsRef<Vec<String>> for InvitationActiveKeys {
     fn as_ref(&self) -> &Vec<String> {
@@ -342,6 +343,8 @@ impl TryFrom<String> for InvitationActiveKeys {
 }
 
 >>>>>>> 3a59650 (Initial commit)
+=======
+>>>>>>> 61c52fe (Add VS Code configuration and improve developer documentation)
 impl AsRef<Vec<String>> for AdminDIDs {
     fn as_ref(&self) -> &Vec<String> {
         &self.0
@@ -394,6 +397,7 @@ impl TryFrom<String> for DnsNameservers {
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 // Default implementation for testing
@@ -438,4 +442,3 @@ impl Default for Config {
         }
     }
 }
->>>>>>> 3a59650 (Initial commit)
