@@ -46,3 +46,6 @@ Cargo.lock
 
 /keys.json
 /.vscode/launch.json
+
+.*.env
+.env

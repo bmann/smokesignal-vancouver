@@ -61,11 +61,7 @@ url = "2.5"
 cookie = "0.18"
 ammonia = "4"
 rust-embed = "8.5"
-<<<<<<< HEAD
 sqlx = { version = "0.8", default-features = false, features = ["derive", "macros", "migrate", "json", "runtime-tokio", "postgres", "chrono", "tls-rustls-ring-native-roots"] }
-=======
-sqlx = { version = "0.8", default-features = false, features = ["derive", "macros", "migrate", "json", "runtime-tokio", "postgres", "chrono", "tls-rustls"] }
->>>>>>> 3a59650 (Initial commit)
 elliptic-curve = { version = "0.13.8", features = ["pem", "pkcs8", "sec1", "std", "alloc", "digest", "ecdh", "jwk", "bits"] }
 p256 = { version = "0.13.2", features = ["ecdsa-core", "jwk", "serde", "ecdh"] }
 ordermap = "0.5"
@@ -77,17 +73,10 @@ fluent = "0.16"
 fluent-bundle = "0.15"
 fluent-syntax = "0.11"
 sha2 = "0.10.8"
-<<<<<<< HEAD
 redis = { version = "0.28", features = ["tokio-comp", "tokio-rustls-comp"] }
 itertools = "0.14.0"
 deadpool = "0.12.2"
 deadpool-redis = {version = "0.20.0", features = ["connection-manager", "tokio-comp", "tokio-rustls-comp"] }
-=======
-redis = { version = "0.28", features = ["connection-manager", "r2d2", "tokio-comp"] }
-itertools = "0.14.0"
-deadpool = "0.12.2"
-deadpool-redis = "0.20.0"
->>>>>>> 3a59650 (Initial commit)
 crockford = "1.2.1"
 tokio-websockets = { version = "0.11.3", features = ["client", "rand", "ring", "rustls-native-roots"] }
 zstd = "0.13.3"
