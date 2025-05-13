@@ -275,10 +275,7 @@ pub async fn oauth_init(
         .post(par_url)
         .header("DPoP", dpop_proof_token.as_str())
         .form(&params)
-<<<<<<< HEAD
         .timeout(Duration::from_secs(HTTP_CLIENT_TIMEOUT_SECS))
-=======
->>>>>>> 3a59650 (Initial commit)
         .send()
         .await
         .map_err(OAuthClientError::PARMiddlewareRequestFailed)?
@@ -375,10 +372,7 @@ pub async fn oauth_complete(
         .post(token_endpoint)
         .header("DPoP", dpop_proof_token.as_str())
         .form(&params)
-<<<<<<< HEAD
         .timeout(Duration::from_secs(HTTP_CLIENT_TIMEOUT_SECS))
-=======
->>>>>>> 3a59650 (Initial commit)
         .send()
         .await
         .map_err(OAuthClientError::TokenMiddlewareRequestFailed)?
@@ -475,10 +469,7 @@ pub async fn client_oauth_refresh(
         .post(token_endpoint)
         .header("DPoP", dpop_proof_token.as_str())
         .form(&params)
-<<<<<<< HEAD
         .timeout(Duration::from_secs(HTTP_CLIENT_TIMEOUT_SECS))
-=======
->>>>>>> 3a59650 (Initial commit)
         .send()
         .await
         .map_err(OAuthClientError::TokenMiddlewareRequestFailed)?
