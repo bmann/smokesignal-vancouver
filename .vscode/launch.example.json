@@ -20,12 +20,11 @@
             "env": {
                 "DEBUG": "true",
                 "HTTP_PORT": "3100",
-                "EXTERNAL_BASE": "your-hostname",
-                "HTTP_COOKIE_KEY": "Iteax8DsUgOrQJdES+zMa6JKYlbQkewl42Y1bO1ExSyB9jkUktrdKwwWSu+X58T20liLmsegL3LbQB0FvE1AEA",
-                "DATABASE_URL": "postgres://postgres:password@postgres/smokesignal",
-                "OAUTH_ACTIVE_KEYS": "01JV2SGY5K5KW5V4YS0YQ352FD",
-                "DESTINATION_KEY": "01JV2SGY5K5KW5V4YS0YQ352FD",
-                "SIGNING_KEYS": "/workspace/keys.json",
+                "EXTERNAL_BASE": "yourhostname",
+                "HTTP_COOKIE_KEY": "7omSYPNPwxT2gZPf0sQ51kPhaWKAqBu22M0j2il81LyIWP79jR4lrS1rBRX5ZIQS9qxATh469XL0k4G8c67r+A",
+                "OAUTH_ACTIVE_KEYS": "01JV8430MGTTA692WBYFGRMWRG",
+                "DESTINATION_KEY": "01JV8430MGTTA692WBYFGRMWRG",
+                "SIGNING_KEYS": "eyJrZXlzIjpbeyJraWQiOiIwMUpWODQzME1HVFRBNjkyV0JZRkdSTVdSRyIsImFsZyI6IkVTMjU2Iiwia3R5IjoiRUMiLCJjcnYiOiJQLTI1NiIsIngiOiJYb3dFbHpXMFhTeXVXUWJOaVFpTDFmbm9RQlhZRmkwWk9BQ2U3S3JONU1jIiwieSI6IkFXLWpFNWYtcXNZYVBoRFhCUUNuNjVCaVRKRWtJRVEzYXFONXV2b1U1TkkiLCJkIjoiNXNvT2RZWko2MzVoWnJWMmlRcFgya1dPR19wdFB0eHJVN1J4eFFaUTNJSSJ9XX0K",
                 "RUST_LOG": "smokesignal=debug,html5ever=info,info"
             }
         }
