@@ -210,11 +210,8 @@ pub mod web {
     pub async fn query_hostname(http_client: &reqwest::Client, hostname: &str) -> Result<Document> {
         let url = format!("https://{}/.well-known/did.json", hostname);
 
-<<<<<<< HEAD
         tracing::debug!(?url, "query_hostname");
 
-=======
->>>>>>> 3a59650 (Initial commit)
         http_client
             .get(&url)
             .send()
