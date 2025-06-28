@@ -1,0 +1,43 @@
+{%- from "pagination.html" import view_pagination -%}
+<section class="section">
+    <div class="container">
+        <h1 class="title">@{{ profile.handle }}</h1>
+        <div class="buttons">
+            <a class="button is-link is-outlined" href="https://bsky.app/profile/{{ profile.did }}" target="_blank">
+                <span class="icon">
+                    <i class="fab fa-bluesky"></i>
+                </span>
+                <span>Bluesky</span>
+            </a>
+
+            {% if is_self %}
+            <a class="button is-info" href="/settings" hx-boost="true">
+                <span class="icon">
+                    <i class="fas fa-cog"></i>
+                </span>
+                <span>Settings</span>
+            </a>
+
+            <a class="button is-primary is-outlined" href="/import">
+                <span class="icon">
+                    <i class="fas fa-download"></i>
+                </span>
+                <span>Import Records</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="tabs">
+            <ul>
+                <li class="is-active"><a>Recently Updated</a></li>
+            </ul>
+        </div>
+        {% include 'event_list.en-us.incl.html' %}
+        {% if pagination %}
+        {{ view_pagination((canonical_url ~ "?"), pagination) }}
+        {% endif %}
+    </div>
+</section>

@@ -1,0 +1,21 @@
+{% extends "base.en-us.html" %}
+{% block title %}Smoke Signal Admin{% endblock %}
+{% block head %}{% endblock %}
+{% block content %}
+<section class="section pb-0">
+    <div class="container">
+        <h1 class="title">Smoke Signal Admin</h1>
+        <div class="content">
+            <div class="block">
+                <h2 class="subtitle">Administration Tools</h2>
+                <ul>
+                    <li><a href="/admin/handles">Handle Records</a> - Manage known handles</li>
+                    <li><a href="/admin/denylist">Manage Denylist</a> - Manage blocked identities</li>
+                    <li><a href="/admin/events">Event Records</a> - View all events ordered by recent updates</li>
+                    <li><a href="/admin/rsvps">RSVP Records</a> - View all RSVPs ordered by recent updates</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% from "form_include.html" import text_input %}
+<section class="section is-fullheight">
+  <div class="container ">
+
+    <div class="box content">
+
+      <h1>Create Event</h1>
+
+      <article class="message is-info">
+        <div class="message-body">
+          <p>
+            Events are public and can be viewed by anyone that can view the information stored in your PDS. Do not
+            publish personal or sensitive information in your events.
+          </p>
+          <p>
+            Learn more about events on the
+            <a href="https://docs.smokesignal.events/docs/help/events/" rel="help">
+              Event Help
+            </a>
+            page.
+          </p>
+        </div>
+      </article>
+
+      {% include 'create_event.en-us.partial.html' %}
+
+    </div>
+
+  </div>
+</section>
+<script>
+  function checkUserKeydown(event) {
+    return event instanceof KeyboardEvent
+  }
+</script>

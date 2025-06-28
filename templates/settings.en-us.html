@@ -1,0 +1,18 @@
+{% extends "base.en-us.html" %}
+{% block title %}Settings - Smoke Signal{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="title">Settings</h1>
+        
+        {% if updated %}
+        <div class="notification is-success">
+            <button class="delete"></button>
+            Your settings have been updated successfully.
+        </div>
+        {% endif %}
+
+        {% include "settings.en-us.common.html" %}
+    </div>
+</section>
+{% endblock %}

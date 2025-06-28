@@ -1,0 +1,64 @@
+{% extends "base.en-us.html" %}
+{% include 'pagination.html' %}
+{% block title %}Handles - Smoke Signal Admin{% endblock %}
+{% block head %}{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/admin">Admin</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Handles</a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <h1 class="title">Handle Records ({{ total_count }})</h1>
+            <p class="subtitle">View known handles</p>
+            
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>DID</th>
+                        <th>Handle</th>
+                        <th>PDS</th>
+                        <th>Language</th>
+                        <th>Timezone</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for handle in handles %}
+                    <tr>
+                        <td><a href="/{{ handle.did }}">{{ handle.did }}</a></td>
+                        <td>{{ handle.handle }}</td>
+                        <td>{{ handle.pds }}</td>
+                        <td>{{ handle.language }}</td>
+                        <td>{{ handle.tz }}</td>
+                        <td>{{ handle.updated_at }}</td>
+                        <td>
+                            <button class="button is-danger is-small"
+                                    hx-post="/admin/handles/nuke/{{ handle.did }}"
+                                    hx-confirm="Are you sure you want to nuke this identity? This will delete all records and add the handle, PDS, and DID to the denylist."
+                                    hx-target="body"
+                                    data-loading-disable
+                                    data-loading-class="is-loading">
+                                Nuke Identity
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pagination %}
+            {{ view_pagination((canonical_url ~ "?"), pagination) }}
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

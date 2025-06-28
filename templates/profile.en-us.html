@@ -1,0 +1,21 @@
+{% extends "base.en-us.html" %}
+{% block title %}Smoke Signal{% endblock %}
+{% block head %}
+<link rel="alternate" href="at://{{ profile.did }}" />
+<meta name="description" content="@{{ profile.handle }} {{ profile.did }} on Smoke Signal">
+<meta property="og:title" content="@{{ profile.handle }}" />
+<meta property="og:description" content="@{{ profile.handle }} {{ profile.did }} on Smoke Signal" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ external_base }}/{{ profile.did }}" />
+<meta property="og:site_name" content="Smoke Signal" />
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "@{{ profile.handle }}",
+      "url": "{{ external_base }}/{{ profile.did }}"
+    }
+</script>{% endblock %}
+{% block content %}
+{% include 'profile.en-us.common.html' %}
+{% endblock %}

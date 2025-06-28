@@ -1,0 +1,24 @@
+{% extends "base.en-us.html" %}
+{% block title %}Smoke Signal - Login{% endblock %}
+{% block head %}{% endblock %}
+{% block content %}
+<section class="section is-fullheight">
+    <div class="container is-max-tablet">
+        <div class="box content">
+            <p class="has-text-weight-bold">Sign into Smoke Signal using your full ATProto handle.</p>
+            <p>
+                The
+                <a href="https://docs.smokesignal.events/docs/getting-started/quick-start/">
+                    Quick Start Guide
+                </a>
+                is a step-by-step guide to getting started.
+            </p>
+            {% include 'login.en-us.partial.html' %}
+
+            {# <p><a target="_blank" href="#">Trouble signing in?</a></p> #}
+
+        </div>
+
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% if event_url %}
+{% if hx_request %}
+<article class="message is-success">
+  <div class="message-body">
+    <p>The RSVP has been recorded!</p>
+  </div>
+</article>
+{% else %}
+<article class="message is-success">
+  <div class="message-header">
+    <p>The RSVP has been recorded!</p>
+  </div>
+  <div class="message-body">
+    <p class="buttons">
+      <a class="button" href="{{ event_url }}">
+        <span class="icon">
+          <i class="fas fa-file"></i>
+        </span>
+        <span>View Event</span>
+      </a>
+    </p>
+  </div>
+</article>
+{% endif %}
+{% else %}
+
+{% from "form_include.html" import text_input %}
+<form hx-post="/rsvp" hx-swap="outerHTML" class="my-5">
+
+    {% if build_rsvp_form.build_state == "Reset" %}
+    <input type="hidden" name="build_state" value="Selecting">
+    {% elif build_rsvp_form.build_state == "Selecting" %}
+    <input type="hidden" name="build_state" value="Selected">
+    {% elif build_rsvp_form.build_state == "Selected" %}
+    <input type="hidden" name="build_state" value="Review">
+    {% elif build_rsvp_form.build_state == "Review" %}
+    <input type="hidden" name="build_state" value="Review">
+    {% endif %}
+
+    <div class="field">
+        <label class="label" for="createRsvpSubjectAtUriInput">Event AT-URI (required)</label>
+        <div class="control {% if build_rsvp_form.subject_aturi_error %} has-icons-right{% endif %}"
+            data-loading-class="is-loading">
+            <input type="text" class="input {% if build_rsvp_form.subject_aturi_error %} is-danger{% endif %}"
+                id="createRsvpSubjectAtUriInput" name="subject_aturi" placeholder="at://smokesignal.events/community.lexicon.calendar.event/neat" {%
+                if build_rsvp_form.subject_aturi %}value="{{ build_rsvp_form.subject_aturi }}" {% endif %} required
+                data-loading-disable>
+        </div>
+        {% if build_rsvp_form.subject_aturi_error %}
+        <p class="help is-danger">{{ build_rsvp_form.subject_aturi_error }}</p>
+        {% endif %}
+    </div>
+
+    <div class="field">
+        <label class="label" for="createRsvpSubjectCidInput">Event CID</label>
+        <div class="control {% if build_rsvp_form.subject_cid_error %} has-icons-right{% endif %}"
+            data-loading-class="is-loading">
+            <input type="text" class="input {% if build_rsvp_form.subject_cid_error %} is-danger{% endif %}"
+                id="createRsvpSubjectCidInput" name="subject_cid" {%
+                if build_rsvp_form.subject_cid %}value="{{ build_rsvp_form.subject_cid }}" {% endif %}
+                data-loading-disable>
+        </div>
+        {% if build_rsvp_form.subject_cid_error %}
+        <p class="help is-danger">{{ build_rsvp_form.subject_cid_error }}</p>
+        {% endif %}
+    </div>
+
+    <div class="field pb-5">
+        <label class="label" for="createRsvpStatusInput">Status</label>
+        <div class="control">
+            <div class="select">
+                <select id="createRsvpStatusInput" name="status"
+                    class="{% if build_rsvp_form.status_error %}is-danger{% endif %}">
+                    <option {% if build_rsvp_form.status=='going' or not build_rsvp_form.status %} selected="selected" {% endif %} value="going">
+                        Going
+                    </option>
+                    <option {% if build_rsvp_form.status=='interested' %} selected="selected" {% endif %} value="interested">
+                        Interested
+                    </option>
+                    <option {% if build_rsvp_form.status=='notgoing' %} selected="selected" {% endif %} value="notgoing">
+                        Not Going
+                    </option>
+                </select>
+            </div>
+        </div>
+        {% if build_rsvp_form.status_error %}
+        <p class="help is-danger">{{ build_rsvp_form.status_error }}</p>
+        {% endif %}
+    </div>
+
+    <hr/>
+    <div class="field">
+        <div class="control">
+            <button data-loading-disable data-loading-aria-busy type="submit" id="createRsvpSubmit"
+                class="button is-link" name="submit" value="Submit">Record RSVP</button>
+        </div>
+    </div>
+
+<pre><code>{{ build_rsvp_form | tojson(indent=2) }}</code></pre>
+</form>
+
+
+{% endif %}

@@ -1,0 +1,21 @@
+<div class="field">
+    <label class="label">Language</label>
+    <div class="control">
+        <div class="select">
+            <select name="language" 
+                    hx-post="/settings/language" 
+                    hx-target="#language-form"
+                    hx-swap="innerHTML"
+                    hx-trigger="change"
+                    data-loading-disable
+                    data-loading-aria-busy>
+                {% for lang in languages %}
+                <option value="{{ lang }}" {% if lang == current_handle.language %}selected{% endif %}>{{ lang }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    {% if language_updated %}
+    <p class="help is-success">Language updated successfully.</p>
+    {% endif %}
+</div>

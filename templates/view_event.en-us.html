@@ -1,0 +1,23 @@
+{% extends "base.en-us.html" %}
+{% block title %}Smoke Signal{% endblock %}
+{% block head %}
+<meta name="description" content="{{ event.description_short }}">
+<meta property="og:title" content="{{ event.name }}">
+<meta property="og:description" content="{{ event.description_short }}">
+<meta property="og:site_name" content="Smoke Signal" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ base }}{{ event.site_url }}" />
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "{{ event.name }}",
+      "description": "{{ event.description_short }}",
+      "url": "{{ base }}{{ event.site_url }}"
+    }
+</script>
+<link rel="alternate" href="{{ event.aturi }}" />
+{% endblock %}
+{% block content %}
+{% include 'view_event.en-us.common.html' %}
+{% endblock %}

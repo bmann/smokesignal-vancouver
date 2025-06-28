@@ -1,0 +1,16 @@
+{% extends "base.en-us.html" %}
+{% block title %}Smoke Signal{% endblock %}
+{% block head %}
+<meta name="description" content="Smoke Signal is an event and RSVP management system.">
+<meta property="og:title" content="Smoke Signal">
+<meta property="og:description" content="Smoke Signal is an event and RSVP management system.">
+<meta property="og:site_name" content="Smoke Signal" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://smokesignal.events/" />
+<script type="application/ld+json">
+{ "@context" : "https://schema.org", "@type" : "Organization", "url" : "https://smokesignal.events/", "name": "Smoke Signal" }
+</script>
+{% endblock %}
+{% block content %}
+{% include 'index.en-us.common.html' %}
+{% endblock %}

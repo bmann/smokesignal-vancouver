@@ -1,0 +1,47 @@
+<section class="section">
+    <div class="container">
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <div class="columns">
+                        <div class="column is-half">
+                            <h2 class="subtitle">Account Information</h2>
+                            <div class="field">
+                                <label class="label">DID</label>
+                                <div class="control">
+                                    <input class="input" type="text" value="{{ current_handle.did }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Handle</label>
+                                <div class="control">
+                                    <input class="input" type="text" value="{{ current_handle.handle }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">PDS</label>
+                                <div class="control">
+                                    <input class="input" type="text" value="{{ current_handle.pds }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="column is-half">
+                            <h2 class="subtitle">Preferences</h2>
+
+                            <div id="language-form">
+                                {% include "settings.en-us.language.html" %}
+                            </div>
+
+                            <div id="timezone-form">
+                                {% include "settings.en-us.tz.html" %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,456 @@
+<section class="section">
+    <div class="container">
+        {% if is_legacy_event %}
+        <article class="message is-warning">
+            <div class="message-body">
+                <span class="icon-text">
+                    <span class="icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </span>
+                    <span>You are viewing a older version of this event.</span>
+                    {% if standard_event_exists %}
+                    <span class="ml-3">
+                        <a href="{{ base }}{{ standard_event_url }}" class="button is-small is-primary">
+                            <span class="icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </span>
+                            <span>View Latest</span>
+                        </a>
+                    </span>
+                    {% endif %}
+                    {% if can_edit and not standard_event_exists %}
+                    <span class="ml-3">
+                        <a href="{{ base }}/{{ handle_slug }}/{{ event_rkey }}/migrate" class="button is-small is-info">
+                            <span class="icon">
+                                <i class="fas fa-arrows-up-to-line"></i>
+                            </span>
+                            <span>Migrate to Lexicon Community Event</span>
+                        </a>
+                    </span>
+                    {% endif %}
+                </span>
+            </div>
+        </article>
+        {% elif using_fallback_collection %}
+        <article class="message is-info">
+            <div class="message-body">
+                <span class="icon-text">
+                    <span class="icon">
+                        <i class="fas fa-info-circle"></i>
+                    </span>
+                    <span>This event was found in the "{{ fallback_collection }}" collection.</span>
+                </span>
+            </div>
+        </article>
+        {% endif %}
+        <h1 class="title">{{ event.name }}</h1>
+        <h1 class="subtitle">
+            <a href="{{ base }}/{{ event.organizer_did }}">
+                @{{ event.organizer_display_name }}
+            </a>
+            {% if can_edit %}
+            <a href="{{ base }}/{{ handle_slug }}/{{ event_rkey }}/edit"
+                class="button is-small is-outlined is-primary ml-2">
+                <span class="icon">
+                    <i class="fas fa-edit"></i>
+                </span>
+                <span>Edit</span>
+            </a>
+            {% endif %}
+        </h1>
+        <div class="level subtitle">
+            {% if event.status == "planned" %}
+            <span class="icon-text" title="The event is planned.">
+                <span class="icon">
+                    <i class="fas fa-calendar-days"></i>
+                </span>
+                <span class="is-hidden-tablet">Planned</span>
+            </span>
+            {% elif event.status == "scheduled" %}
+            <span class="level-item icon-text" title="The event is scheduled.">
+                <span class="icon">
+                    <i class="fas fa-calendar-check"></i>
+                </span>
+                <span>Scheduled</span>
+            </span>
+            {% elif event.status == "rescheduled" %}
+            <span class="level-item icon-text is-info" title="The event is rescheduled.">
+                <span class="icon">
+                    <i class="fas fa-calendar-plus"></i>
+                </span>
+                <span>Rescheduled</span>
+            </span>
+            {% elif event.status == "cancelled" %}
+            <span class="level-item icon-text is-danger" title="The event is cancelled.">
+                <span class="icon">
+                    <i class="fas fa-calendar-xmark"></i>
+                </span>
+                <span>Cancelled</span>
+            </span>
+            {% elif event.status == "postponed" %}
+            <span class="level-item icon-text is-warning" title="The event is postponed.">
+                <span class="icon">
+                    <i class="fas fa-calendar-minus"></i>
+                </span>
+                <span>Postponed</span>
+            </span>
+            {% else %}
+            <span class="level-item icon-text" title="No event status set.">
+                <span class="icon">
+                    <i class="fas fa-question"></i>
+                </span>
+                <span class="is-italic">No Status Set</span>
+            </span>
+            {% endif %}
+            <span class="level-item icon-text" title="
+            {%- if event.starts_at_human -%}
+                Starts at {{ event.starts_at_human }}
+            {%- else -%}
+                No start time is set.
+            {%- endif -%}">
+                <span class="icon">
+                    <i class="fas fa-clock"></i>
+                </span>
+                <span>
+                    {% if event.starts_at_human %}
+                    <time class="dt-start" {% if event.starts_at_machine %} datetime="{{ event.starts_at_machine }}" {%
+                        endif %}>
+                        {{- event.starts_at_human -}}
+                    </time>
+                    {% else %}
+                    No Start Time Set
+                    {% endif %}
+                </span>
+            </span>
+
+            <span class="level-item icon-text" title="
+            {%- if event.ends_at_human -%}
+                Ends at {{ event.ends_at_human }}
+            {%- else -%}
+                No end time is set.
+            {%- endif -%}">
+                <span class="icon">
+                    <i class="fas fa-stop"></i>
+                </span>
+                {% if event.ends_at_human %}
+                <span>
+                    <time class="dt-end" {% if event.ends_at_machine %} datetime="{{ event.ends_at_machine }}" {% endif
+                        %}>
+                        {{- event.ends_at_human -}}
+                    </time>
+                </span>
+                {% else %}
+                <span class="is-italic">No End Time Set</span>
+                {% endif %}
+            </span>
+
+            {% if event.mode == "inperson" %}
+            <span class="level-item icon-text" title="In Person">
+                <span class="icon">
+                    <i class="fas fa-users"></i>
+                </span>
+                <span>In Person</span>
+            </span>
+            {% elif event.mode == "virtual" %}
+            <span class="level-item icon-text" title="An Virtual (Online) Event">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>Virtual</span>
+            </span>
+            {% elif event.mode == "hybrid" %}
+            <span class="level-item icon-text" title="A Hybrid In-Person and Virtual (Online) Event">
+                <span class="icon">
+                    <i class="fas fa-user-plus"></i>
+                </span>
+                <span>Hybrid</span>
+            </span>
+            {% endif %}
+        </div>
+        {% if event.address_display %}
+        <div class="level subtitle">
+            <span class="level-item">
+                {{ event.address_display }}
+            </span>
+            <a class="level-item" href="//maps.apple.com/?q={{ event.address_display }}" rel="nofollow" target="blank">
+                <span class="icon-text">
+                    <span class="icon">
+                        <i class="fab fa-apple"></i>
+                    </span>
+                    <span>Apple Maps</span>
+                </span>
+            </a>
+            <a class="level-item" href="//maps.google.com/?q={{ event.address_display }}" rel="nofollow" target="blank">
+                <span class="icon-text">
+                    <span class="icon">
+                        <i class="fab fa-google"></i>
+                    </span>
+                    <span>Google Maps</span>
+                </span>
+            </a>
+        </div>
+        {% endif %}
+
+        {% if event.links %}
+        {% for (link, link_label) in event.links %}
+        <div class="level subtitle">
+            <a class="level-item" href="{{ link }}" rel="nofollow" target="blank">
+                <span class="icon-text">
+                    <span class="icon">
+                        <i class="fas fa-link"></i>
+                    </span>
+                    <span>{{ link_label if link_label else link }}</span>
+                </span>
+            </a>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% if is_legacy_event %}
+        <article class="message is-info">
+            <div class="message-body">
+                <span class="icon-text">
+                    <span class="icon">
+                        <i class="fas fa-info-circle"></i>
+                    </span>
+                    <span>RSVPs are not available for legacy events.</span>
+                    {% if standard_event_exists %}
+                    <span>Please use the <a href="{{ base }}{{ standard_event_url }}">standard
+                            version</a> of this event to RSVP.</span>
+                    {% if user_rsvp_status and not user_has_standard_rsvp %}
+                    <div class="mt-2">
+                        <a href="{{ base }}/{{ handle_slug }}/{{ event_rkey }}/migrate-rsvp"
+                            class="button is-small is-info">
+                            <span class="icon">
+                                <i class="fas fa-sync-alt"></i>
+                            </span>
+                            <span>Migrate my RSVP to Lexicon Community Event</span>
+                        </a>
+                    </div>
+                    {% elif user_rsvp_status and user_has_standard_rsvp %}
+                    <div class="mt-2">
+                        <span class="tag is-success">
+                            <span class="icon">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span>Your RSVP has been migrated</span>
+                        </span>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                </span>
+            </div>
+        </article>
+        {% elif not current_handle %}
+        <article class="message is-success">
+            <div class="message-body">
+                <a href="{{ base }}/oauth/login">Log in</a> to RSVP to this
+                event.
+            </div>
+        </article>
+        {% else %}
+        {% if not user_rsvp_status %}
+        <article class="message" id="rsvpFrame">
+            <div class="message-body">
+                <div class="columns is-vcentered is-multiline">
+                    <div class="column">
+                        <p>You have not RSVP'd.</p>
+                    </div>
+                    <div class="column">
+                        <button class="button is-success is-fullwidth" hx-post="/rsvp" hx-target="#rsvpFrame"
+                            hx-swap="outerHTML"
+                            hx-vals='{"subject_aturi": "{{ event.aturi }}", "build_state": "Review", "status": "going"}'>
+                            <span class="icon">
+                                <i class="fas fa-star"></i>
+                            </span>
+                            <span>Going</span>
+                        </button>
+                    </div>
+                    <div class="column">
+                        <button class="button is-link is-fullwidth" hx-post="/rsvp" hx-target="#rsvpFrame"
+                            hx-swap="outerHTML"
+                            hx-vals='{"subject_aturi": "{{ event.aturi }}", "build_state": "Review", "status": "interested"}'>
+                            <span class="icon">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                            <span>Interested</span>
+                        </button>
+                    </div>
+                    <div class="column">
+                        <button class="button is-warning is-fullwidth" hx-post="/rsvp" hx-target="#rsvpFrame"
+                            hx-swap="outerHTML"
+                            hx-vals='{"subject_aturi": "{{ event.aturi }}", "build_state": "Review", "status": "notgoing"}'>
+                            <span class="icon">
+                                <i class="fas fa-ban"></i>
+                            </span>
+                            <span>Not Going</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% elif user_rsvp_status == "going" %}
+        <article class="message is-info" id="rsvpFrame">
+            <div class="message-body">
+                <div class="columns is-vcentered is-multiline">
+                    <div class="column">
+                        <p>You have RSVP'd <strong>Going</strong>.</p>
+                    </div>
+                    <div class="column">
+                        <button class="button is-link is-fullwidth" hx-post="/rsvp" hx-target="#rsvpFrame"
+                            hx-swap="outerHTML"
+                            hx-vals='{"subject_aturi": "{{ event.aturi }}", "build_state": "Review", "status": "interested"}'>
+                            <span class="icon">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                            <span>Interested</span>
+                        </button>
+                    </div>
+                    <div class="column">
+                        <button class="button is-warning is-fullwidth" hx-post="/rsvp" hx-target="#rsvpFrame"
+                            hx-swap="outerHTML"
+                            hx-vals='{"subject_aturi": "{{ event.aturi }}", "build_state": "Review", "status": "notgoing"}'>
+                            <span class="icon">
+                                <i class="fas fa-ban"></i>
+                            </span>
+                            <span>Not Going</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% elif user_rsvp_status == "interested" %}
+        <article class="message is-info" id="rsvpFrame">
+            <div class="message-body">
+                <div class="columns is-vcentered is-multiline">
+                    <div class="column">
+                        <p>You have RSVP'd <strong>Interested</strong>.</p>
+                    </div>
+                    <div class="column">
+                        <button class="button is-success is-fullwidth" hx-post="/rsvp" hx-target="#rsvpFrame"
+                            hx-swap="outerHTML"
+                            hx-vals='{"subject_aturi": "{{ event.aturi }}", "build_state": "Review", "status": "going"}'>
+                            <span class="icon">
+                                <i class="fas fa-star"></i>
+                            </span>
+                            <span>Going</span>
+                        </button>
+                    </div>
+                    <div class="column">
+                        <button class="button is-warning is-fullwidth" hx-post="/rsvp" hx-target="#rsvpFrame"
+                            hx-swap="outerHTML"
+                            hx-vals='{"subject_aturi": "{{ event.aturi }}", "build_state": "Review", "status": "notgoing"}'>
+                            <span class="icon">
+                                <i class="fas fa-ban"></i>
+                            </span>
+                            <span>Not Going</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% elif user_rsvp_status == "notgoing" %}
+        <article class="message is-warning" id="rsvpFrame">
+            <div class="message-body">
+                <div class="columns is-vcentered is-multiline">
+                    <div class="column">
+                        <p>You have RSVP'd <strong>Not Going</strong>.</p>
+                    </div>
+                    <div class="column">
+                        <button class="button is-success is-fullwidth" hx-post="/rsvp" hx-target="#rsvpFrame"
+                            hx-swap="outerHTML"
+                            hx-vals='{"subject_aturi": "{{ event.aturi }}", "build_state": "Review", "status": "going"}'>
+                            <span class="icon">
+                                <i class="fas fa-star"></i>
+                            </span>
+                            <span>Going</span>
+                        </button>
+                    </div>
+                    <div class="column">
+                        <button class="button is-link is-fullwidth" hx-post="/rsvp" hx-target="#rsvpFrame"
+                            hx-swap="outerHTML"
+                            hx-vals='{"subject_aturi": "{{ event.aturi }}", "build_state": "Review", "status": "interested"}'>
+                            <span class="icon">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                            <span>Interested</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% endif %}
+        {% endif %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="container" style="word-break: break-word; white-space: pre-wrap;">
+        {%- autoescape false -%}
+        {{- event.description -}}
+        {%- endautoescape -%}
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        {% if not is_legacy_event %}
+        <div class="tabs">
+            <ul>
+                <li {% if active_tab=="going" %}class="is-active" {% endif %}>
+                    <a href="?tab=going&collection={{ fallback_collection if using_fallback_collection else collection }}"
+                        rel="nofollow">
+                        Going ({{ event.count_going | default("0") }})
+                    </a>
+                </li>
+                <li {% if active_tab=="interested" %}class="is-active" {% endif %}>
+                    <a href="?tab=interested&collection={{ fallback_collection if using_fallback_collection else collection }}"
+                        rel="nofollow">
+                        Interested ({{ event.count_interested | default("0") }})
+                    </a>
+                </li>
+                <li {% if active_tab=="notgoing" %}class="is-active" {% endif %}>
+                    <a href="?tab=notgoing&collection={{ fallback_collection if using_fallback_collection else collection }}"
+                        rel="nofollow">
+                        Not Going ({{ event.count_not_going | default("0") }})
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="grid is-col-min-12 has-text-centered">
+            {% if active_tab == "going" %}
+            {% for handle in going %}
+            <span class="cell">
+                <a href="/@{{ handle }}">@{{ handle }}</a>
+            </span>
+            {% endfor %}
+            {% elif active_tab == "interested" %}
+            {% for handle in interested %}
+            <span class="cell">
+                <a href="/@{{ handle }}">@{{ handle }}</a>
+            </span>
+            {% endfor %}
+            {% else %}
+            {% for handle in notgoing %}
+            <span class="cell">
+                <a href="/@{{ handle }}">@{{ handle }}</a>
+            </span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="notification is-light">
+            <p class="has-text-centered">
+                RSVP information is not available for legacy events.
+                {% if standard_event_exists %}
+                <br><a href="{{ base }}{{ standard_event_url }}" class="button is-small is-primary mt-2">
+                    <span class="icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </span>
+                    <span>View latest version to see RSVPs</span>
+                </a>
+                {% endif %}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</section>

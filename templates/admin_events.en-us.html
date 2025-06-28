@@ -1,0 +1,75 @@
+{% extends "base.en-us.html" %}
+{% include 'pagination.html' %}
+{% block title %}Events - Smoke Signal Admin{% endblock %}
+{% block head %}{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/admin">Admin</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Events</a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <h1 class="title">Event Records ({{ total_count }})</h1>
+            <p class="subtitle">View all events ordered by recent updates</p>
+            
+            <div class="box mb-5">
+                <h2 class="title is-4">Import Event by AT-URI</h2>
+                <form action="/admin/events/import" method="post">
+                    <div class="field">
+                        <label class="label" for="importAtUriInput">AT-URI</label>
+                        <div class="control has-icons-left">
+                            <input class="input" type="text" id="importAtUriInput" name="aturi" required="required" 
+                                placeholder="at://did:plc:abc123/app.bsky.feed.post/record123">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-link"></i>
+                            </span>
+                        </div>
+                        <p class="help">Enter the full AT-URI of the event to import</p>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Import Event</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                    <tr>
+                        <td><a href="/admin/event?aturi={{ event.aturi }}">{{ event.aturi }}</a></td>
+                        <td>{{ event.updated_at }}</td>
+                        <td>
+                            <div class="buttons">
+                                <a href="/admin/event?aturi={{ event.aturi }}" class="button is-small is-info">
+                                    View
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pagination %}
+            {{ view_pagination((canonical_url ~ "?"), pagination) }}
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% if events %}
+
+{% for event in events %}
+
+<article class="media">
+    <div class="media-content">
+
+        <div class="level mb-1">
+            <div class="level-left">
+
+                {% if event.role %}
+                <span class="level-item tag is-info is-light">
+                    <div class="icon-text">
+                        <span class="icon">
+                            <i class="
+                            {%- if role == 'going' -%}
+                            fas fa-star
+                            {%- elif role == 'interested' -%}
+                            fas fa-eye
+                            {%- elif role == 'notgoing' -%}
+                            fas fa-ban
+                            {%- elif role == 'organizer' -%}
+                            fas fa-calendar
+                            {%- else -%}
+                            fas fa-question
+                            {%- endif -%}
+                            "></i>
+                        </span>
+                        <span>
+                            {%- if role == 'going' -%}
+                            Going
+                            {%- elif role == 'interested' -%}
+                            Interested
+                            {%- elif role == 'notgoing' -%}
+                            Not Going
+                            {%- elif role == 'organizer' -%}
+                            Organizer
+                            {%- else -%}
+                            Unknown
+                            {%- endif -%}
+                        </span>
+                    </div>
+                </span>
+                {% endif %}
+
+                {% if event.collection != "community.lexicon.calendar.event" %}
+                <span class="level-item tag is-warning">Legacy</span>
+                {% endif %}
+
+                <a class="level-item title has-text-link is-size-4 has-text-weight-semibold mb-0"
+                    href="{{ base }}{{ event.site_url }}" hx-boost="true">
+                    {% autoescape false %}{{ event.name }}{% endautoescape %}
+                </a>
+
+            </div>
+        </div>
+        <div class="level mb-1">
+            <div class="level-left">
+                {% if event.status == "planned" %}
+                <span class="level-item icon-text is-hidden-tablet" title="The event is planned.">
+                    <span class="icon">
+                        <i class="fas fa-calendar-days"></i>
+                    </span>
+                    <span>Planned</span>
+                </span>
+                {% elif event.status == "scheduled" %}
+                <span class="level-item icon-text is-hidden-tablet" title="The event is scheduled.">
+                    <span class="icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </span>
+                    <span>Scheduled</span>
+                </span>
+                {% elif event.status == "rescheduled" %}
+                <span class="level-item icon-text is-hidden-tablet is-info" title="The event is rescheduled.">
+                    <span class="icon">
+                        <i class="fas fa-calendar-plus"></i>
+                    </span>
+                    <span>Rescheduled</span>
+                </span>
+                {% elif event.status == "cancelled" %}
+                <span class="level-item icon-text is-hidden-tablet is-danger" title="The event is cancelled.">
+                    <span class="icon">
+                        <i class="fas fa-calendar-xmark"></i>
+                    </span>
+                    <span>Cancelled</span>
+                </span>
+                {% elif event.status == "postponed" %}
+                <span class="level-item icon-text is-hidden-tablet is-warning" title="The event is postponed.">
+                    <span class="icon">
+                        <i class="fas fa-calendar-minus"></i>
+                    </span>
+                    <span>Postponed</span>
+                </span>
+                {% endif %}
+                {% if event.starts_at_human %}
+                <span class="level-item icon-text" title="Starts at {{ event.starts_at_human }}">
+                    <span class="icon">
+                        <i class="fas fa-clock"></i>
+                    </span>
+                    <span><time class="dt-start" {% if event.starts_at_machine %}
+                            datetime="{{ event.starts_at_machine }}" {% endif %}>
+                            {{- event.starts_at_human -}}
+                        </time></span>
+                </span>
+                {% endif %}
+
+                <span class="level-item">
+                    <a href="{{ base }}/{{ event.organizer_did }}" hx-boost="true">
+                        @{{ event.organizer_display_name }}
+                    </a>
+                </span>
+
+                {% if event.mode == "inperson" %}
+                <span class="level-item icon-text" title="In Person">
+                    <span class="icon">
+                        <i class="fas fa-users"></i>
+                    </span>
+                    <span class="is-hidden-tablet">In Person</span>
+                </span>
+                {% elif event.mode == "virtual" %}
+                <span class="level-item icon-text" title="An Virtual (Online) Event">
+                    <span class="icon">
+                        <i class="fas fa-globe"></i>
+                    </span>
+                    <span class="is-hidden-tablet">Virtual</span>
+                </span>
+                {% elif event.mode == "hybrid" %}
+                <span class="level-item icon-text" title="A Hybrid In-Person and Virtual (Online) Event">
+                    <span class="icon">
+                        <i class="fas fa-user-plus"></i>
+                    </span>
+                    <span class="is-hidden-tablet">Hybrid</span>
+                </span>
+                {% endif %}
+
+                <span class="level-item icon-text" title="{{ event.count_going }} Going">
+                    <span class="icon">
+                        <i class="fas fa-star"></i>
+                    </span>
+                    <span>{{ event.count_going }}<span class="is-hidden-tablet"> Going</span></span>
+                </span>
+                <span class="level-item icon-text" title="{{ event.count_interested }} Interested">
+                    <span class="icon">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                    <span>{{ event.count_interested }}<span class="is-hidden-tablet"> Interested</span></span>
+                </span>
+                <span class="level-item icon-text" title="{{ event.count_not_going }} Not Going">
+                    <span class="icon">
+                        <i class="fas fa-ban"></i>
+                    </span>
+                    <span>{{ event.count_not_going }}<span class="is-hidden-tablet"> Not Going</span></span>
+                </span>
+            </div>
+        </div>
+
+        <div class="my-2">
+            <p>{% autoescape false %}{{ event.description_short }}{% endautoescape %}</p>
+        </div>
+
+    </div>
+</article>
+
+{% endfor %}
+
+{% endif %}

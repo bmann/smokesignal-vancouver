@@ -1,0 +1,182 @@
+<div id="startsAt" class="field py-5">
+    <div class="control">
+        {% if is_development %}
+        <pre><code>{{ starts_form | tojson(indent=2) }}</code></pre>
+        {% endif %}
+        {% if starts_form.build_state == "Selecting" %}
+        <div id="startAtModal" class="modal is-active" tabindex="-1">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="box">
+                    <div class="field">
+                        <label class="label" for="createEventTzInput">Timezone</label>
+                        <div class="control">
+                            <div class="select">
+                                <select id="createEventStartsAtTZ" name="tz">
+                                    {% for timezone in timezones %}
+                                    <option value="{{ timezone }}" {% if timezone==starts_form.tz %}selected{% endif %}>
+                                        {{ timezone }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="field-body">
+                            <div class="field">
+                                <label class="label" for="createEventStartsAtDate">Start Day (required)</label>
+                                <div class="control">
+                                    <input id="createEventStartsAtDate" type="date" class="form-control"
+                                        name="starts_date" {% if starts_form.starts_date %}
+                                        value="{{ starts_form.starts_date }}" {% endif %} required />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="createEventStartsAtTime">Start Time (required)</label>
+                                <div class="control">
+                                    <input id="createEventStartsAtTime" type="time" class="form-control"
+                                        name="starts_time" {% if starts_form.starts_time %}
+                                        value="{{ starts_form.starts_time }}" {% endif %} required />
+                                </div>
+                            </div>
+                        </div>
+                        {% if starts_form.starts_at_error %}
+                        <p class="help is-danger">{{ starts_form.starts_at_error }}</p>
+                        {% endif %}
+                    </div>
+                    {% if starts_form.include_ends %}
+                    <input hidden type="text" name="include_ends" value="true">
+                    <div class="field">
+                        <div class="field-body">
+                            <div class="field">
+                                <label class="label" for="createEventStartsAtDate">End Day (required)</label>
+                                <div class="control">
+                                    <input id="createEventEndsAtDate" type="date" class="form-control" name="ends_date"
+                                        {% if starts_form.ends_date %} value="{{ starts_form.ends_date }}" {% endif %}
+                                        required />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="createEventStartsAtTime">End Time (required)</label>
+                                <div class="control">
+                                    <input id="createEventEndsAtTime" type="time" class="form-control" name="ends_time"
+                                        {% if starts_form.ends_time %} value="{{ starts_form.ends_time }}" {% endif %}
+                                        required />
+                                </div>
+                            </div>
+                        </div>
+                        {% if starts_form.ends_at_error %}
+                        <p class="help is-danger">{{ starts_form.ends_at_error }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="field py-4">
+                        <div class="control">
+                            <button hx-post="/event/starts" hx-target="#startsAt" hx-swap="outerHTML" hx-trigger="click"
+                                hx-params="build_state,include_ends,starts_date,starts_time,ends_date,ends_time,tz"
+                                hx-vals='{ "build_state": "Selecting", "include_ends": false }'
+                                class="button is-link">Remove End Time</button>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="field py-4">
+                        <div class="control">
+                            <button hx-post="/event/starts" hx-target="#startsAt" hx-swap="outerHTML" hx-trigger="click"
+                                hx-params="build_state,include_ends,starts_date,starts_time,ends_date,ends_time,tz"
+                                hx-vals='{ "build_state": "Selecting", "include_ends": true }'
+                                class="button is-link">Add End Time</button>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="field is-grouped pt-4">
+                        <p class="control">
+                            <button hx-post="/event/starts" hx-target="#startsAt" hx-swap="outerHTML" hx-trigger="click"
+                                hx-params="build_state,include_ends,starts_date,starts_time,ends_date,ends_time,tz"
+                                hx-vals='{ "build_state": "Selected" }' class="button is-primary">Save</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button hx-post="/event/starts" hx-target="#startsAt" hx-swap="outerHTML" hx-trigger="click"
+                hx-params="build_state" hx-vals='{ "build_state": "Reset" }' class="modal-close is-large"
+                aria-label="close"></button>
+        </div>
+        {% elif (starts_form.build_state == "Selected") %}
+        <div class="field">
+            <div class="field-body is-align-items-end">
+                <div class="field">
+                    <label class="label" for="createEventStartsAt">Starts At</label>
+                    <div class="control">
+                        <input id="createEventStartsAt" type="text" class="input is-static"
+                            value="{{ starts_form.starts_display }}" readonly />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="createEventEndsAt">Ends At</label>
+                    <div class="control">
+                        <input id="createEventEndsAt" type="text" class="input is-static"
+                            value="{{ starts_form.ends_display if starts_form.ends_display is not none else '---' }}" readonly />
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <p class="control">
+                        <button hx-post="/event/starts" hx-target="#startsAt" hx-swap="outerHTML" hx-trigger="click"
+                            hx-params="build_state,include_ends,starts_date,starts_time,ends_date,ends_time,tz"
+                            hx-vals='{ "build_state": "Selecting" }' data-bs-toggle="modal"
+                            data-bs-target="startAtModal" class="button is-link is-outlined">Edit</button>
+                    </p>
+                    <p class="control">
+                        <button hx-post="/event/starts" hx-target="#startsAt" hx-swap="outerHTML" hx-trigger="click"
+                            hx-params="build_state,tz" hx-vals='{ "build_state": "Reset" }'
+                            class="button is-danger is-outlined">Clear</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% if starts_form.starts_date %}
+        <input hidden type="text" name="starts_date" value="{{ starts_form.starts_date }}">
+        {% endif %}
+        {% if starts_form.starts_time %}
+        <input hidden type="text" name="starts_time" value="{{ starts_form.starts_time }}">
+        {% endif %}
+        {% if starts_form.starts_at %}
+        <input hidden type="text" name="starts_at" value="{{ starts_form.starts_at }}">
+        {% endif %}
+        {% if starts_form.include_ends %}
+        <input hidden type="text" name="include_ends" value="{{ starts_form.include_ends }}">
+        {% endif %}
+        {% if starts_form.ends_date %}
+        <input hidden type="text" name="ends_date" value="{{ starts_form.ends_date }}">
+        {% endif %}
+        {% if starts_form.ends_time %}
+        <input hidden type="text" name="ends_time" value="{{ starts_form.ends_time }}">
+        {% endif %}
+        {% if starts_form.ends_at %}
+        <input hidden type="text" name="ends_at" value="{{ starts_form.ends_at }}">
+        {% endif %}
+        {% elif starts_form.build_state == "Reset" %}
+        <div class="field">
+            <div class="field-body is-align-items-end">
+                <div class="field">
+                    <label class="label" for="createEventStartsAt">Starts At</label>
+                    <div class="control">
+                        <input id="createEventStartsAt" type="text" class="input is-static" value="Not Set" readonly />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="createEventEndsAt">Ends At</label>
+                    <div class="control">
+                        <input id="createEventEndsAt" type="text" class="input is-static" value="Not Set" readonly />
+                    </div>
+                </div>
+                <div class="field">
+                    <p class="control">
+                        <button hx-post="/event/starts" hx-target="#startsAt" hx-swap="outerHTML" hx-trigger="click"
+                            hx-params="build_state" hx-vals='{ "build_state": "Selecting" }'
+                            class="button is-link is-outlined">Edit</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>

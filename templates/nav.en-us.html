@@ -1,0 +1,60 @@
+<section class="section py-0">
+    <div class="container">
+        <nav class="navbar is-transparent" role="navigation" aria-label="main dropdown navigation">
+
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/" hx-boost="true">
+                    <img src="/static/logo-160x160.png" alt="Smoke Signal" height="160" />
+                    Smoke Signal
+                </a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                    data-target="navbarMenuMain">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div id="navbarMenuMain" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="/" hx-boost="true">
+                        Home
+                    </a>
+                    <a class="navbar-item" href="/">
+                        Help
+                    </a>
+                    <a class="navbar-item" href="/">
+                        Blog
+                    </a>
+                </div>
+
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            {% if current_handle %}
+                            <a class="button is-primary" href="/event" hx-boost="true">
+                                <span class="icon">
+                                <i class="fas fa-calendar-plus"></i>
+                                </span>
+                                <span>Add Event</span>
+                            </a>
+                            <a class="button is-link" href="/{{ current_handle.did }}" hx-boost="true">
+                                <span class="icon">
+                                <i class="fas fa-user"></i>
+                                </span>
+                                <span>Your Profile</span>
+                            </a>
+                            <a class="button is-danger is-light"
+                                href="/logout">Log out</a>
+                            {% else %}
+                            <a class="button is-primary" href="/oauth/login" hx-boost="true">Log in</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</section>

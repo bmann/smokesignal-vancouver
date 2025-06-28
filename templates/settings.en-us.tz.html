@@ -1,0 +1,16 @@
+<div class="field">
+    <label class="label">Time Zone</label>
+    <div class="control">
+        <div class="select">
+            <select name="timezone" hx-post="/settings/timezone" hx-target="#timezone-form" hx-swap="innerHTML"
+                hx-trigger="change" data-loading-disable data-loading-aria-busy>
+                {% for tz in timezones %}
+                <option value="{{ tz }}" {% if tz==current_handle.tz %}selected{% endif %}>{{ tz }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    {% if timezone_updated %}
+    <p class="help is-success">Time zone updated successfully.</p>
+    {% endif %}
+</div>

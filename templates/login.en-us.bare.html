@@ -1,0 +1,25 @@
+{% extends "bare.en-us.html" %}
+{% block content %}
+<section class="section is-fullheight">
+    <div class="container is-max-tablet">
+
+        <div class="box content">
+
+            <article class="message is-link">
+                <div class="message-body">
+                    <p>
+                        The <a href="https://docs.smokesignal.events/docs/getting-started/quick-start/">Quick Start Guide</a> has a
+                        step-by-step guide to getting started.
+                    </p>
+                </div>
+            </article>
+
+            {% include 'login.en-us.partial.html' %}
+
+            <p><a target="_blank" href="#">Trouble signing in?</a></p>
+
+        </div>
+
+    </div>
+</section>
+{% endblock %}

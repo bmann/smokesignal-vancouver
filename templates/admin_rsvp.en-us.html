@@ -1,0 +1,81 @@
+{% extends "base.en-us.html" %}
+{% block title %}RSVP Record - Smoke Signal Admin{% endblock %}
+{% block head %}
+<style>
+    pre {
+        white-space: pre-wrap;
+        overflow: auto;
+        max-height: 70vh;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/admin">Admin</a></li>
+                <li><a href="/admin/rsvps">RSVPs</a></li>
+                <li class="is-active"><a href="#" aria-current="page">RSVP Record</a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <h1 class="title">RSVP Record</h1>
+            
+            <div class="columns">
+                <div class="column is-half">
+                    <div class="box">
+                        <h2 class="subtitle">RSVP Details</h2>
+                        <table class="table is-fullwidth">
+                            <tbody>
+                                <tr>
+                                    <th>AT-URI</th>
+                                    <td><code>{{ rsvp.aturi }}</code></td>
+                                </tr>
+                                <tr>
+                                    <th>CID</th>
+                                    <td><code>{{ rsvp.cid }}</code></td>
+                                </tr>
+                                <tr>
+                                    <th>DID</th>
+                                    <td><a href="/{{ rsvp.did }}"><code>{{ rsvp.did }}</code></a></td>
+                                </tr>
+                                <tr>
+                                    <th>Lexicon</th>
+                                    <td><code>{{ rsvp.lexicon }}</code></td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>{{ rsvp.status }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Event AT-URI</th>
+                                    <td><a href="/admin/event?aturi={{ rsvp.event_aturi }}"><code>{{ rsvp.event_aturi }}</code></a></td>
+                                </tr>
+                                <tr>
+                                    <th>Event CID</th>
+                                    <td><code>{{ rsvp.event_cid }}</code></td>
+                                </tr>
+                                <tr>
+                                    <th>Updated</th>
+                                    <td>{{ rsvp.updated_at }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <div class="box">
+                        <h2 class="subtitle">RSVP JSON</h2>
+                        <pre><code>{{ rsvp_json }}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.en-us.html" %}
+{% include 'pagination.html' %}
+{% block title %}Manage Denylist - Smoke Signal Admin{% endblock %}
+{% block head %}{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/admin">Admin</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Denylist</a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <h2 class="subtitle">Add or Update Entry</h2>
+            <form action="/admin/denylist/add" method="POST">
+                <div class="field">
+                    <label class="label">Subject</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="at://did:plc:..." name="subject" required>
+                    </div>
+                    <p class="help">URI of the content to block (at URI, DIDs, URLs, domains)</p>
+                </div>
+
+                <div class="field">
+                    <label class="label">Reason</label>
+                    <div class="control">
+                        <textarea class="textarea" placeholder="Reason for blocking..." name="reason"
+                            required></textarea>
+                    </div>
+                    <p class="help">Reason for blocking this content</p>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" class="button is-primary">Add/Update Entry</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Reason</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                    <tr>
+                        <td><code>{{ entry.subject }}</code></td>
+                        <td>{{ entry.reason }}</td>
+                        <td>{{ entry.updated_at }}</td>
+                        <td>
+                            <form action="/admin/denylist/remove" method="POST">
+                                <input type="hidden" name="subject" value="{{ entry.subject }}">
+                                <button type="submit" class="button is-small is-danger">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pagination %}
+            {{ view_pagination((canonical_url ~ "?"), pagination) }}
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

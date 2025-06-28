@@ -1,0 +1,73 @@
+{% from "form_include.html" import text_input, text_input_display %}
+<div id="linksGroup" class="field py-5">
+    <div class="control">
+        {% if is_development %}
+        <pre><code>{{ link_form | tojson(indent=2) }}</code></pre>
+        {% endif %}
+        {% if link_form.build_state == "Selecting" %}
+        <div id="linksGroupModal" class="modal is-active" tabindex="-1">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="box">
+                    {{ text_input('Link Name (optional)', 'linkName', 'link_name',
+                    value=link_form.link_name, error=link_form.link_name_error, extra='placeholder="Tickets"') }}
+
+                    {{ text_input('Link (required)', 'linkValue', 'link_value',
+                    value=link_form.link_value, error=link_form.link_value_error,
+                    extra='placeholder="https://smokesignal.tickets/"') }}
+
+                    <div class="field is-grouped pt-4">
+                        <p class="control">
+                            <button hx-post="/event/links" hx-target="#linksGroup" hx-swap="outerHTML"
+                                hx-trigger="click" hx-params="build_state,link_name,link_value"
+                                hx-vals='{ "build_state": "Selected" }' class="button is-primary">Save</button>
+                        </p>
+                        <p class="control">
+                            <button hx-post="/event/links" hx-target="#linksGroup" hx-swap="outerHTML"
+                                hx-trigger="click" hx-params="build_state" hx-vals='{ "build_state": "Reset" }'
+                                class="button is-danger">Cancel</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button hx-post="/event/links" hx-target="#linksGroup" hx-swap="outerHTML" hx-trigger="click"
+                hx-params="build_state" hx-vals='{ "build_state": "Reset" }' class="modal-close is-large"
+                aria-label="close"></button>
+        </div>
+        {% elif (link_form.build_state == "Selected") %}
+
+        {{ text_input_display('Link Name', 'link_name', value=link_form.link_name) }}
+
+        {{ text_input_display('Link', 'link_value', value=link_form.link_value) }}
+
+        <div class="field is-grouped">
+            <p class="control">
+                <button hx-post="/event/links" hx-target="#linksGroup" hx-swap="outerHTML" hx-trigger="click"
+                    hx-params="build_state,link_name,link_value" hx-vals='{ "build_state": "Selecting" }'
+                    class="button is-link is-outlined">Edit</button>
+            </p>
+            <p class="control">
+                <button hx-post="/event/links" hx-target="#linksGroup" hx-swap="outerHTML" hx-trigger="click"
+                    hx-params="build_state" hx-vals='{ "build_state": "Reset" }' class="button is-danger">Clear</button>
+            </p>
+        </div>
+        {% if link_form.link_name %}
+        <input hidden type="text" name="link_name" value="{{ link_form.link_name }}">
+        {% endif %}
+        {% if link_form.link_value %}
+        <input hidden type="text" name="link_value" value="{{ link_form.link_value }}">
+        {% endif %}
+        {% elif link_form.build_state == "Reset" %}
+
+        {{ text_input('Link', 'linkResetPlaceholder', value='--', class_extra=' is-static', extra=' readonly ') }}
+
+        <div class="field">
+            <p class="control">
+                <button hx-post="/event/links" hx-target="#linksGroup" hx-swap="outerHTML" hx-trigger="click"
+                    hx-params="build_state" hx-vals='{ "build_state": "Selecting" }'
+                    class="button is-link is-outlined">Edit</button>
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>

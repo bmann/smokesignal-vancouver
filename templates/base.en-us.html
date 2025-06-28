@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+    {% if canonical_url %}
+    <link rel="canonical" href="{{ canonical_url }}">
+    {% endif %}
+    <link rel="stylesheet" href="/static/fontawesome.min.css">
+    <link rel="stylesheet" href="/static/bulma.min.css">
+    <script src="/static/htmx.js"></script>
+    <script src="/static/loading-states.js"></script>
+    <script src="/static/sse.js"></script>
+    <script src="/static/site.js"></script>
+    {% block head %}
+    {% endblock %}
+    <meta name="theme-color" content="#00d1b2">
+</head>
+<body hx-ext="loading-states">
+    {% include 'nav.en-us.html' %}
+    {% block content %}{% endblock %}
+    {% include 'footer.en-us.html' %}
+</body>
+
+</html>

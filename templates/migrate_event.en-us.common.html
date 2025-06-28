@@ -1,0 +1,66 @@
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <h1 class="title">Event Migration Complete</h1>
+            
+            <div class="box">
+                <article class="message is-success">
+                    <div class="message-body">
+                        <p class="has-text-weight-bold">
+                            <span class="icon has-text-success">
+                                <i class="fas fa-check-circle"></i>
+                            </span>
+                            The event "{{ event_name }}" has been successfully migrated!
+                        </p>
+                    </div>
+                </article>
+                
+                <div class="mt-4">
+                    <p>Your event has been migrated from the legacy SmokeSiggnal format to the new ATProto Community Calendar format.</p>
+                    <p>The event now has better compatibility with other applications and additional features.</p>
+                    
+                    <div class="field mt-4">
+                        <label class="label">Migration Details</label>
+                        <div class="table-container">
+                            <table class="table is-bordered is-fullwidth">
+                                <tbody>
+                                    <tr>
+                                        <th>Source Format</th>
+                                        <td><code>{{ source_lexicon }}</code></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Target Format</th>
+                                        <td><code>{{ target_lexicon }}</code></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Source AT-URI</th>
+                                        <td><code>{{ source_aturi }}</code></td>
+                                    </tr>
+                                    <tr>
+                                        <th>New AT-URI</th>
+                                        <td><code>{{ migrated_aturi }}</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons mt-5">
+                        <a href="{{ migrated_event_url }}" class="button is-primary">
+                            <span class="icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </span>
+                            <span>View Migrated Event</span>
+                        </a>
+                        <a href="/{{ current_handle.handle }}" class="button is-light">
+                            <span class="icon">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <span>Back to Profile</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

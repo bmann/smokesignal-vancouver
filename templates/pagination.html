@@ -1,0 +1,19 @@
+{%- macro view_pagination(url, pagination) -%}
+{% if pagination.previous or pagination.next %}
+<nav class="pagination pt-5" role="navigation" aria-label="pagination">
+  {%- if pagination.previous -%}
+  <a href="{{ url }}{{ pagination.previous_url }}" class="pagination-previous"
+    rel="nofollow">Previous</a>
+  {%- else -%}
+  <a class="pagination-previous is-disabled">Previous</a>
+  {%- endif -%}
+
+  {%- if pagination.next -%}
+  <a href="{{ url }}{{ pagination.next_url }}" class="pagination-next"
+    rel="nofollow">Next</a>
+  {%- else -%}
+  <a class="pagination-next is-disabled">Next</a>
+  {%- endif -%}
+</nav>
+{% endif %}
+{%- endmacro -%}

@@ -1,0 +1,10 @@
+<article class="message is-{{ message_type | default("danger") }}">
+    {% if message_title %}
+    <div class="message-header">
+        <p>{{ message_title }}</p>
+    </div>
+    {% endif %}
+    <div class="message-body">
+        {{ message }}
+    </div>
+</article>

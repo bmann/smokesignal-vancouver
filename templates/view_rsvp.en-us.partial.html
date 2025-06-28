@@ -1,0 +1,13 @@
+<div class="content">
+{% if aturi %}
+    <p><code>{{ aturi }}</code></p>
+{% if rsvp_json %}
+    <div class="box">
+        <pre><code>{{ rsvp_json }}</code></pre>
+    </div>
+{% endif %}
+</div>
+{% else %}
+<p>No results found.</p>
+{% endif %}
+</div>

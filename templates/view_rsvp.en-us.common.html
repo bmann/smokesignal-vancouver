@@ -1,0 +1,33 @@
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <h1 class="title">RSVP Viewer</h1>
+            
+            <div class="box">
+                <form hx-get="/rsvps" hx-target="#rsvp-result" hx-swap="innerHTML" hx-indicator="#spinner">
+                    <div class="field">
+                        <label class="label">RSVP AT-URI</label>
+                        <div class="control">
+                            <input class="input" type="text" name="aturi" placeholder="at://did:plc:example/community.lexicon.calendar.rsvp/abcdef123" required>
+                        </div>
+                        <p class="help">Enter the full AT-URI of the RSVP you want to view</p>
+                    </div>
+                    
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-primary" type="submit">
+                                <span>View RSVP</span>
+                                <span id="spinner" class="htmx-indicator">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="rsvp-result">
+    {% include 'view_rsvp.en-us.partial.html' %}
+            </div>
+        </div>
+    </div>
+</section>

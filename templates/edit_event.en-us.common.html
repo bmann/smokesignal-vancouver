@@ -1,0 +1,17 @@
+{% from "form_include.html" import text_input %}
+<section class="section is-fullheight">
+  <div class="container ">
+
+    <div class="box content">
+
+      <h1>Edit Event</h1>
+      {% include 'create_event.en-us.partial.html' %}
+    </div>
+
+  </div>
+</section>
+<script>
+  function checkUserKeydown(event) {
+    return event instanceof KeyboardEvent
+  }
+</script>

@@ -1,0 +1,48 @@
+<div id="importRecords">
+    <article class="message">
+        <div class="message-body">
+            {% if completed %}
+            <p>Import complete!</p>
+            {% else %}
+            <button class="button is-link" hx-post="/import" hx-target="#importRecords" hx-swap="outerHTML"
+                hx-vals='{ {% if collection %} "collection": "{{ collection }}", {% endif %}{% if cursor %} "cursor": "{{ cursor }}", {% endif %} "ignore":"this"}'>
+                <span class="icon">
+                    <i class="fas fa-file-import"></i>
+                </span>
+                {% if items_paged %}
+                {% if cursor %}
+                <span>Continue Import</span>
+                {% else %}
+                <span>Import Complete</span>
+                {% endif %}
+                {% else %}
+                <span>Start Import</span>
+                {% endif %}
+            </button>
+
+            {% if collection %}
+            <div class="mt-3">
+                <p><strong>Current Collection:</strong> {{ collection }}</p>
+                {% if cursor %}
+                <p><small>Cursor: {{ cursor }}</small></p>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </article>
+    {% if not completed and items_paged %}
+    <div class="box">
+        <h2 class="title is-5">Imported Items</h2>
+        {% if items %}
+        <ul>
+            {% for item in items %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No items found in this collection.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>

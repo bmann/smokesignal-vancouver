@@ -1,0 +1,188 @@
+{% if operation_completed %}
+<article class="message is-success">
+    <div class="message-header">
+        {% if create_event %}
+        <p>The event has been created!</p>
+        {% else %}
+        <p>The event has been updated!</p>
+        {% endif %}
+    </div>
+    <div class="message-body">
+        <p class="buttons">
+            <a class="button" href="{{ event_url }}">
+                <span class="icon">
+                    <i class="fas fa-file"></i>
+                </span>
+                <span>View Event</span>
+            </a>
+        </p>
+    </div>
+</article>
+{% else %}
+
+{% from "form_include.html" import text_input %}
+<form hx-post="{{ submit_url }}" hx-swap="outerHTML" class="my-5">
+
+    {% if build_event_form.build_state == "Reset" %}
+    <input type="hidden" name="build_state" value="Selecting">
+    {% elif build_event_form.build_state == "Selecting" %}
+    <input type="hidden" name="build_state" value="Selected">
+    {% elif build_event_form.build_state == "Selected" %}
+    <input type="hidden" name="build_state" value="Selected">
+    {% endif %}
+
+
+    <div class="field">
+        <label class="label" for="createEventNameInput">Name (required)</label>
+        <div class="control {% if build_event_form.name_error %} has-icons-right{% endif %}"
+            data-loading-class="is-loading">
+            <input type="text" class="input {% if build_event_form.name_error %} is-danger{% endif %}"
+                id="createEventNameInput" name="name" minlength="10" maxlength="500" placeholder="My Awesome Event" {%
+                if build_event_form.name %}value="{{ build_event_form.name }}" {% endif %} required
+                data-loading-disable>
+        </div>
+        {% if build_event_form.name_error %}
+        <p class="help is-danger">{{ build_event_form.name_error }}</p>
+        {% else %}
+        <p class="help">Must be at least 10 characters and no more than 500 characters.</p>
+        {% endif %}
+    </div>
+
+    <div class="field">
+        <label class="label" for="createEventTextInput">Text (required)</label>
+        <div class="control">
+            <textarea class="textarea{% if build_event_form.description_error %} is-danger{% endif %}"
+                id="createEventTextInput" name="description" maxlength="3000" rows="10"
+                placeholder="A helpful, brief description of the event." required
+                data-loading-disable>{% if build_event_form.description %}{{ build_event_form.description }}{% endif %}</textarea>
+        </div>
+        {% if build_event_form.description_error %}
+        <p class="help is-danger">{{ build_event_form.description_error }}</p>
+        {% else %}
+        <p class="help">Must be at least 10 characters and no more than 3000 characters.</p>
+        {% endif %}
+    </div>
+
+    <div class="field">
+        <div class="field-body">
+            <div class="field">
+                <label class="label" for="createEventStatus">Status</label>
+                <div class="control">
+                    <div class="select">
+                        <select id="createEventStatus" name="status"
+                            class="{% if build_event_form.status_error %}is-danger{% endif %}">
+                            <option {% if build_event_form.status=='planned' or not build_event_form.status %}
+                                selected="selected" {% endif %} value="planned">
+                                Planned
+                            </option>
+                            <option {% if build_event_form.status=='scheduled' %} selected="selected" {% endif %}
+                                value="scheduled">
+                                Scheduled
+                            </option>
+                            <option {% if build_event_form.status=='cancelled' %} selected="selected" {% endif %}
+                                value="cancelled">
+                                Cancelled
+                            </option>
+                            <option {% if build_event_form.status=='postponed' %} selected="selected" {% endif %}
+                                value="postponed">
+                                Postponed
+                            </option>
+                            <option {% if build_event_form.status=='rescheduled' %} selected="selected" {% endif %}
+                                value="rescheduled">
+                                Rescheduled
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                {% if build_event_form.status_error %}
+                <p class="help is-danger">{{ build_event_form.status_error }}</p>
+                {% endif %}
+            </div>
+            <div class="field pb-5">
+                <label class="label" for="createEventMode">Mode</label>
+                <div class="control">
+                    <div class="select">
+                        <select id="createEventMode" name="mode"
+                            class="{% if build_event_form.mode_error %}is-danger{% endif %}">
+                            <option value="virtual" {% if build_event_form.mode=='virtual' %} selected{% endif %}>
+                                Virtual
+                            </option>
+                            <option value="hybrid" {% if build_event_form.mode=='hybrid' %} selected{% endif %}>Hybrid
+                            </option>
+                            <option value="inperson" {% if build_event_form.mode=='inperson' or not
+                                build_event_form.mode %} selected{% endif %}>In Person</option>
+                        </select>
+                    </div>
+                </div>
+                {% if build_event_form.mode_error %}
+                <p class="help is-danger">{{ build_event_form.mode_error }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% include "create_event.en-us.starts_form.html" %}
+
+    {% if locations_editable or create_event %}
+    {% include "create_event.en-us.location_form.html" %}
+    {% else %}
+    <div class="field">
+        <label class="label">Location</label>
+        <div class="notification is-warning">
+            <p><strong>Location cannot be edited</strong></p>
+            <p>{{ location_edit_reason }}</p>
+            <p>Only events with a single location of type "Address" can be edited through this form.</p>
+        </div>
+        
+        {% if location_display_info %}
+        <!-- Display existing locations in read-only mode -->
+        <div class="content">
+            <ul>
+                {% for location in location_display_info %}
+                <li>
+                    {% if location.type == "uri" %}
+                    <strong>Link:</strong> 
+                    {% if location.name %}{{ location.name }}{% endif %}
+                    <a href="{{ location.uri }}" target="_blank">{{ location.uri }}</a>
+                    {% elif location.type == "address" %}
+                    <strong>Address:</strong>
+                    {% if location.name %}<div>{{ location.name }}</div>{% endif %}
+                    {% if location.street %}<div>{{ location.street }}</div>{% endif %}
+                    {% if location.locality %}{{ location.locality }}{% endif %}{% if location.region %}, {{ location.region }}{% endif %}{% if location.postal_code %} {{ location.postal_code }}{% endif %}
+                    {% if location.country %}<div>{{ location.country }}</div>{% endif %}
+                    {% else %}
+                    <strong>Other location type</strong>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+        <p>No location information available.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% include "create_event.en-us.link_form.html" %}
+
+    <hr />
+    <div class="field">
+        <div class="control">
+            <button data-loading-disable data-loading-aria-busy type="submit" id="createEventSubmit"
+                class="button is-link" name="submit" value="Submit">
+                {% if create_event %}Create{% else %}Update{% endif %}
+                Event
+            </button>
+            {% if cancel_url %}
+            <a href="{{ cancel_url }}" class="button">Cancel</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if is_development %}
+    <pre><code>{{ build_event_form | tojson(indent=2) }}</code></pre>
+    {% endif %}
+</form>
+
+
+{% endif %}

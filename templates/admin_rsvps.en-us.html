@@ -1,0 +1,89 @@
+{% extends "base.en-us.html" %}
+{% include 'pagination.html' %}
+{% block title %}RSVPs - Smoke Signal Admin{% endblock %}
+{% block head %}{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/admin">Admin</a></li>
+                <li class="is-active"><a href="#" aria-current="page">RSVPs</a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <h1 class="title">RSVP Records ({{ total_count }})</h1>
+            <p class="subtitle">View all RSVPs ordered by recent updates</p>
+            
+            {% if import_success %}
+            <article class="message is-success">
+                <div class="message-body">
+                    <span class="icon-text">
+                        <span class="icon">
+                            <i class="fas fa-check-circle"></i>
+                        </span>
+                        <span>RSVP imported successfully! <a href="/admin/rsvp?aturi={{ imported_aturi }}">View RSVP</a></span>
+                    </span>
+                </div>
+            </article>
+            {% endif %}
+
+            <div class="box">
+                <h2 class="subtitle">Import RSVP</h2>
+                <form method="post" action="/admin/rsvps/import">
+                    <div class="field">
+                        <label class="label">RSVP AT-URI</label>
+                        <div class="control">
+                            <input class="input" type="text" name="aturi" placeholder="at://did:plc:abcdef/community.lexicon.calendar.rsvp/3jizzrxoalv2h" required>
+                        </div>
+                        <p class="help">Enter the AT-URI of an RSVP to import - supports both "community.lexicon.calendar.rsvp" and "events.smokesignal.calendar.rsvp" collections</p>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-primary" type="submit">Import RSVP</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>RSVP</th>
+                        <th>Event</th>
+                        <th>Status</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rsvp in rsvps %}
+                    <tr>
+                        <td><a href="/admin/rsvp?aturi={{ rsvp.aturi }}">{{ rsvp.aturi }}</a></td>
+                        <td><a href="/admin/event?aturi={{ rsvp.event_aturi }}">{{ rsvp.event_aturi }}</a></td>
+                        <td>{{ rsvp.status }}</td>
+                        <td>{{ rsvp.updated_at }}</td>
+                        <td>
+                            <div class="buttons">
+                                <a href="/admin/rsvp?aturi={{ rsvp.aturi }}" class="button is-small is-info">
+                                    View
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pagination %}
+            {{ view_pagination((canonical_url ~ "?"), pagination) }}
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

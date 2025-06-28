@@ -1,0 +1,237 @@
+{% from "form_include.html" import text_input, text_input_display %}
+<div id="locationGroup" class="field">
+    <div class="control">
+        {% if is_development %}
+        <pre><code>{{ location_form | tojson(indent=2) }}</code></pre>
+        {% endif %}
+        {% if location_form.build_state == "Selecting" %}
+        <div id="locationModal" class="modal is-active" tabindex="-1">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="box">
+                    <div class="field">
+                        <label class="label" for="createEventLocationCountryInput">Country (required)</label>
+                        <div class="control">
+                            <div class="select">
+                                <input class="input" id="createEventLocationCountryInput" name="location_country"
+                                    list="locations_country_data" {% if location_form.location_country %}
+                                    value="{{ location_form.location_country }}" {% endif %} autocomplete="off"
+                                    data-1p-ignore hx-get="/event/location/datalist" hx-target="#locations_country_data"
+                                    hx-trigger="keyup[checkUserKeydown.call(this, event)] changed delay:50ms, load" />
+                                <datalist id="locations_country_data">
+                                    <option value="US">United States of America</option>
+                                    <option value="GB">United Kingdom</option>
+                                    <option value="MX">Mexico</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="DE">Germany</option>
+                                </datalist>
+                            </div>
+                        </div>
+                        {% if location_form.location_country_error %}
+                        <p class="help is-danger">{{ location_form.location_country_error }}</p>
+                        {% endif %}
+                    </div>
+
+                    {{ text_input('Location Name (optional)', 'locationAddressName', 'location_name',
+                    value=location_form.location_name, error=location_form.location_name_error,
+                    extra='autocomplete="off" data-1p-ignore placeholder="The Gem City"') }}
+
+                    {{ text_input('Street Address (optional)', 'locationAddressStreet', 'location_street',
+                    value=location_form.location_street, error=location_form.location_street_error,
+                    extra='autocomplete="off" data-1p-ignore placeholder="555 Somewhere"') }}
+
+                    {{ text_input('Locality ("City", optional)', 'locationAddressLocality', 'location_locality',
+                    value=location_form.location_locality, error=location_form.location_locality_error,
+                    extra='autocomplete="off" data-1p-ignore placeholder="Dayton"') }}
+
+                    {{ text_input('Region ("State", optional)', 'locationAddressRegion', 'location_region',
+                    value=location_form.location_region, error=location_form.location_region_error,
+                    extra='autocomplete="off" data-1p-ignore placeholder="Ohio"') }}
+
+                    {{ text_input('Postal Code (optional)', 'locationAddressPostalCode', 'location_postal_code',
+                    value=location_form.location_postal_code, error=location_form.location_postal_code_error,
+                    extra='autocomplete="off" data-1p-ignore placeholder="11111"') }}
+
+                    <div class="field is-grouped pt-4">
+                        <p class="control">
+                            <button hx-post="/event/location" hx-target="#locationGroup" hx-swap="outerHTML"
+                                hx-trigger="click"
+                                hx-params="build_state,location_country,location_name,location_street,location_locality,location_region,location_postal_code"
+                                hx-vals='{ "build_state": "Selected" }' class="button is-primary">Save</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button hx-post="/event/location" hx-target="#locationGroup" hx-swap="outerHTML" hx-trigger="click"
+                hx-params="build_state" hx-vals='{ "build_state": "Reset" }' class="modal-close is-large"
+                aria-label="close"></button>
+        </div>
+        {% elif (location_form.build_state == "Selected") %}
+
+        {{ text_input_display('Location Name', 'location_name', value=location_form.location_name) }}
+
+        {{ text_input_display('Street Address', 'location_street', value=location_form.location_street) }}
+
+        {{ text_input_display('Locality', 'location_locality', value=location_form.location_locality) }}
+
+        {{ text_input_display('Region', 'location_region', value=location_form.location_region) }}
+
+        {{ text_input_display('Postal Code', 'location_postal_code', value=location_form.location_postal_code) }}
+
+        {{ text_input_display('Location Country', 'location_country', value=location_form.location_country) }}
+
+        <div class="field is-grouped">
+            <p class="control">
+                <button hx-post="/event/location" hx-target="#locationGroup" hx-swap="outerHTML" hx-trigger="click"
+                    hx-params="build_state,location_country,location_name,location_street,location_locality,location_region,location_postal_code"
+                    hx-vals='{ "build_state": "Selecting" }' data-bs-toggle="modal" data-bs-target="startAtModal"
+                    class="button is-link is-outlined">Edit</button>
+            </p>
+            <p class="control">
+                <button hx-post="/event/location" hx-target="#locationGroup" hx-swap="outerHTML" hx-trigger="click"
+                    hx-params="build_state" hx-vals='{ "build_state": "Reset" }'
+                    class="button is-danger is-outlined">Clear</button>
+            </p>
+        </div>
+        {% if location_form.location_country %}
+        <input hidden type="text" name="location_country" value="{{ location_form.location_country }}">
+        {% endif %}
+        {% if location_form.location_name %}
+        <input hidden type="text" name="location_name" value="{{ location_form.location_name }}">
+        {% endif %}
+        {% if location_form.location_street %}
+        <input hidden type="text" name="location_street" value="{{ location_form.location_street }}">
+        {% endif %}
+        {% if location_form.location_locality %}
+        <input hidden type="text" name="location_locality" value="{{ location_form.location_locality }}">
+        {% endif %}
+        {% if location_form.location_region %}
+        <input hidden type="text" name="location_region" value="{{ location_form.location_region }}">
+        {% endif %}
+        {% if location_form.location_postal_code %}
+        <input hidden type="text" name="location_postal_code" value="{{ location_form.location_postal_code }}">
+        {% endif %}
+        {% elif location_form.build_state == "Reset" %}
+        <div class="field">
+            <div class="field-body is-align-items-end">
+                <div class="field">
+                    <label class="label" for="createEventLocationCountryInput">Location</label>
+                    <div class="control">
+                        <input id="createEventLocationCountryInput" type="text" class="input is-static" value="Not Set"
+                            readonly />
+                    </div>
+                </div>
+                <div class="field">
+                    <p class="control">
+                        <button hx-post="/event/location" hx-target="#locationGroup" hx-swap="outerHTML"
+                            hx-trigger="click"
+                            hx-params="build_state,location_country,location_name,location_street,location_locality,location_region,location_postal_code"
+                            hx-vals='{ "build_state": "Selecting" }' class="button is-link is-outlined">Edit</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{# {% from "form_include.html" import text_input %}
+<div id="locationsGroup" class="field py-5">
+    <div class="control">
+        {% if location_form.build_state == "Selecting" %}
+        <div id="locationsGroupModal" class="modal is-active" tabindex="-1">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="box">
+                    {{ text_input('Location Name (optional)', 'locationAddressName', 'location_name',
+                    value=location_form.location_name, error=location_form.location_name_error, extra='placeholder="The
+                    Gem City"') }}
+
+                    {{ text_input('Street Address (optional)', 'locationAddressStreet', 'location_street',
+                    value=location_form.location_street, error=location_form.location_street_error,
+                    extra='placeholder="555 Somewhere"') }}
+
+                    <div class="field">
+                        <div class="field-body">
+                            {{ text_input('Locality ("City", optional)', 'locationAddressLocality', 'location_locality',
+                            value=location_form.location_locality, error=location_form.location_locality_error,
+                            extra='placeholder="Dayton"') }}
+
+                            {{ text_input('Region ("State", optional)', 'locationAddressRegion', 'location_region',
+                            value=location_form.location_region, error=location_form.location_region_error,
+                            extra='placeholder="Ohio"') }}
+
+                            {{ text_input('Postal Code (optional)', 'locationAddressPostalCode', 'location_postal_code',
+                            value=location_form.location_postal_code, error=location_form.location_postal_code_error,
+                            extra='placeholder="11111"') }}
+                        </div>
+                    </div>
+
+                    <div class="field is-grouped pt-4">
+                        <p class="control">
+                            <button hx-post="/event/locations" hx-target="#locationsGroup" hx-swap="outerHTML"
+                                hx-trigger="click"
+                                hx-params="build_state,location_name,location_street,location_locality,location_region,location_postal_code,location_country"
+                                hx-vals='{ "build_state": "Selected" }' class="button is-primary">Save</button>
+                        </p>
+                        <p class="control">
+                            <button hx-post="/event/locations" hx-target="#locationsGroup" hx-swap="outerHTML"
+                                hx-trigger="click" hx-params="build_state" hx-vals='{ "build_state": "Reset" }'
+                                class="button is-danger">Cancel</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button hx-post="/event/locations" hx-target="#locationsGroup" hx-swap="outerHTML" hx-trigger="click"
+                hx-params="build_state" hx-vals='{ "build_state": "Reset" }' class="modal-close is-large"
+                aria-label="close"></button>
+        </div>
+        {% elif (location_form.build_state == "Selected") %}
+        {{ text_input('Location Name', 'locationAddressName', 'location_name',
+        value=(location_form.location_name if location_form.location_name is not none else '--'),
+        error=location_form.location_name_error, class_extra=" is-static", extra=' readonly ') }}
+
+        {{ text_input('Street Address', 'locationAddressStreet', 'location_street',
+        value=(location_form.location_street if location_form.location_street is not none else '--'),
+        error=location_form.location_street_error, class_extra=" is-static", extra=' readonly ') }}
+
+        <div class="field">
+            <div class="field-body">
+                {{ text_input('Locality', 'locationAddressLocality', 'location_locality',
+                value=(location_form.location_locality if location_form.location_locality is not none else '--'),
+                error=location_form.location_locality_error, class_extra=" is-static", extra=' readonly ') }}
+
+                {{ text_input('Region', 'locationAddressRegion', 'location_region',
+                value=(location_form.location_region if location_form.location_region is not none else '--'),
+                error=location_form.location_region_error, class_extra=" is-static", extra=' readonly ') }}
+
+                {{ text_input('Postal Code', 'locationAddressPostalCode', 'location_postal_code',
+                value=(location_form.location_postal_code if location_form.location_postal_code is not none else '--'),
+                error=location_form.location_postal_code_error, class_extra=" is-static", extra=' readonly ') }}
+            </div>
+        </div>
+        <div class="field is-grouped">
+            <p class="control">
+                <button hx-post="/event/locations" hx-target="#locationsGroup" hx-swap="outerHTML" hx-trigger="click"
+                    hx-params="build_state,location_name,location_street,location_locality,location_region,location_postal_code,location_country"
+                    hx-vals='{ "build_state": "Selecting" }' class="button is-link is-outlined">Edit</button>
+            </p>
+            <p class="control">
+                <button hx-post="/event/locations" hx-target="#locationsGroup" hx-swap="outerHTML" hx-trigger="click"
+                    hx-params="build_state" hx-vals='{ "build_state": "Reset" }' class="button is-danger">Clear</button>
+            </p>
+        </div>
+        {% elif location_form.build_state == "Reset" %}
+
+        {{ text_input('Location', 'locationResetPlaceholder', value='--', class_extra=' is-static', extra=' readonly ')
+        }}
+
+        <div class="field">
+            <p class="control">
+                <button hx-post="/event/locations" hx-target="#locationsGroup" hx-swap="outerHTML" hx-trigger="click"
+                    hx-params="build_state" hx-vals='{ "build_state": "Selecting" }'
+                    class="button is-link is-outlined">Edit</button>
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div> #}

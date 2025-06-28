@@ -1,0 +1,24 @@
+<form hx-post="/oauth/login" hx-swap="outerHTML" class="my-5">
+    {% if destination %}
+    <input type="hidden" name="destination" value="{{ destination }}">
+    {% endif %}
+    <div class="field">
+        <label class="label" for="loginHandleInput">Handle</label>
+        <div class="control has-icons-left{% if handle_error %} has-icons-right{% endif %}" data-loading-class="is-loading">
+            <input class="input{% if handle_error %} is-danger{% endif %}" type="text" id="loginHandleInput" name="handle" required="required" autocomplete="handle" {% if handle_input %}
+            value="{{ handle_input }}" {% endif %} placeholder="you.bsky.social" data-loading-disable>
+            <span class="icon is-small is-left">
+                <i class="fas fa-at"></i>
+            </span>
+            {% if handle_error %}<span class="icon is-small is-right">
+                <i class="fas fa-exclamation-triangle"></i>
+              </span>{% endif %}
+        </div>
+        {% if handle_error %}<p class="help is-danger">{{ error_message }}</p>{% endif %}
+    </div>
+    <div class="field">
+        <div class="control">
+            <button data-loading-disable type="submit" id="loginSubmit" class="button is-link" name="submit" value="Submit">Sign-In</button>
+        </div>
+    </div>
+</form>

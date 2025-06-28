@@ -1,0 +1,17 @@
+{%- macro text_input(label, id, name="", value="", class_extra="", error="", extra="") -%}
+<div class="field">
+    <label class="label" for="{{ id }}">{{ label }}</label>
+    <div class="control">
+        <input type="text" class="input {{ class_extra }}{% if error %} is-danger{% endif %}" id="{{ id }}" name="{{ name }}" {% if value %} value="{{ value }}"{% endif %}{% autoescape false %} {{ extra }}{% endautoescape %}>
+    </div>
+    {% if error %}<p class="help is-danger">{{ error }}</p>{% endif %}
+</div>
+{%- endmacro -%}
+{%- macro text_input_display(label, id, value) -%}
+<div class="field">
+    <label class="label" for="{{ id }}">{{ label }}</label>
+    <div class="control">
+        <input type="text" class="input is-static" id="{{ id }}" value="{{ value if value is not none else '--' }}" readonly>
+    </div>
+</div>
+{%- endmacro -%}

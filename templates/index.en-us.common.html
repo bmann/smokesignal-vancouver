@@ -1,0 +1,32 @@
+{%- from "pagination.html" import view_pagination -%}
+<section class="section">
+    <div class="container">
+        <h1 class="title is-1">Smoke Signal</h1>
+        <h2 class="subtitle">Find events, make connections, and create community.</h2>
+        <p class="content">
+            The <a href="https://docs.smokesignal.events/docs/getting-started/quick-start/">Quick Start Guide</a> has a
+            step-by-step guide to getting started!
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+    <h2 class="title is-2">Recently Updated Events</h2>
+        {% if error_message %}
+
+        <article class="message is-danger">
+            <div class="message-body">
+                <p>{{ error_message }}</p>
+            </div>
+        </article>
+
+        {% endif %}
+
+        {% include 'event_list.en-us.incl.html' %}
+
+        {% if pagination %}
+        {{ view_pagination((canonical_url ~ "?"), pagination) }}
+        {% endif %}
+    </div>
+</section>
